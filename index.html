@@ -126,3 +126,133 @@
         </div>
         <div class="grid">
             <div class="card" style="text-align:right;">
+                <div class="circle-avatar" style="background:#10b981;">👥</div>
+                <h4>إجمالي الطلاب</h4>
+                <p style="font-size:24px; color:#10b981; font-weight:bold;">1,245</p>
+            </div>
+            <div class="card" style="text-align:right;">
+                <div class="circle-avatar" style="background:#f59e0b;">👨‍🏫</div>
+                <h4>عدد المدرسين</h4>
+                <p style="font-size:24px; color:#f59e0b; font-weight:bold;">89</p>
+            </div>
+            <div class="card" style="text-align:right;">
+                <div class="circle-avatar" style="background:#8b5cf6;">💰</div>
+                <h4>إجمالي الإيرادات</h4>
+                <p style="font-size:24px; color:#8b5cf6; font-weight:bold;">45,000 EGP</p>
+            </div>
+            <div class="card" style="text-align:right;">
+                <div class="circle-avatar" style="background:#06b6d4;">📊</div>
+                <h4>التقارير</h4>
+                <p style="font-size:24px; color:#06b6d4; font-weight:bold;">124</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. لوحة تحكم المدرس -->
+    <div class="panel-layout" id="teacher-panel">
+        <div class="sidebar">
+            <h3>📖 منصة الشطار</h3>
+            <ul class="sidebar-menu"><li class="active">👨‍🎓 طلابي</li><li>📹 دروسي</li><li>📊 إحصائياتي</li><li>💼 عقدي</li><li onclick="location.reload()">🚪 خروج</li></ul>
+        </div>
+        <div class="main-content">
+            <h2>أهلاً يا <span id="lbl-teacher-name" style="color:#28a745;">معلم الشطار</span> 👋</h2>
+            <p style="color:#666;">مرحباً بك في لوحة التحكم - إدارة دروسك وطلابك وإحصائياتك</p>
+            
+            <h3 style="margin-top:30px; color:#28a745; border-bottom:3px solid #28a745; padding-bottom:10px;">📊 إحصائياتي</h3>
+            <div class="grid">
+                <div class="card" style="text-align:right;">
+                    <div class="circle-avatar" style="background:#28a745;">👥</div>
+                    <h4>عدد طلابي</h4>
+                    <p style="font-size:24px; color:#28a745; font-weight:bold;">567</p>
+                </div>
+                <div class="card" style="text-align:right;">
+                    <div class="circle-avatar" style="background:#3b82f6;">📹</div>
+                    <h4>عدد الدروس</h4>
+                    <p style="font-size:24px; color:#3b82f6; font-weight:bold;">42</p>
+                </div>
+                <div class="card" style="text-align:right;">
+                    <div class="circle-avatar" style="background:#f59e0b;">⭐</div>
+                    <h4>التقييم</h4>
+                    <p style="font-size:24px; color:#f59e0b; font-weight:bold;">4.8/5</p>
+                </div>
+                <div class="card" style="text-align:right;">
+                    <div class="circle-avatar" style="background:#10b981;">💵</div>
+                    <h4>الأرباح الشهرية</h4>
+                    <p style="font-size:24px; color:#10b981; font-weight:bold;">12,500 EGP</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ضبط المواد الدراسية (المادة = 50 مدرس)
+        const subjects = [
+            "🧪 الكيمياء", "🔬 الفيزياء", "📐 الرياضيات", "📚 اللغة العربية", "🌍 الجغرافيا",
+            "📖 اللغة الإنجليزية", "🏛️ التاريخ", "🧬 الأحياء", "💻 الحاسوب", "🎨 الفنون",
+            "📝 اللغة الفرنسية", "⚙️ الهندسة", "🎵 التربية الموسيقية", "🏃 التربية الرياضية", "⚗️ الكيمياء (ثانية)"
+        ];
+
+        const teachers = Array.from({length: 50}, (_, i) => ({
+            id: i + 1,
+            name: `أ. ${['محمود', 'فاطمة', 'علي', 'أمينة', 'محمد', 'زينب', 'أحمد', 'نور', 'خالد', 'سارة'][i % 10]} ${['الشرقاوي', 'محمد', 'إبراهيم', 'أحمد', 'علوان', 'السيد', 'محمود', 'علي', 'حسن', 'عبدالله'][Math.floor(i / 10)]}`,
+            rating: (4.5 + Math.random() * 0.5).toFixed(1),
+            students: Math.floor(Math.random() * 500) + 50,
+            price: Math.floor(Math.random() * 200) + 100,
+            subject: subjects[Math.floor(Math.random() * subjects.length)]
+        }));
+
+        function showPanel(panelId) {
+            document.getElementById('register-page').style.display = 'none';
+            document.getElementById('student-panel').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('teacher-panel').style.display = 'none';
+            document.getElementById(panelId).style.display = 'block';
+        }
+
+        function handleGradeChange() {
+            const grade = document.getElementById('s-grade').value;
+            document.getElementById('box-gen-branch').style.display = grade.includes('general') ? 'block' : 'none';
+            document.getElementById('box-az-branch').style.display = grade.includes('azhar') ? 'block' : 'none';
+        }
+
+        function registerStudent() {
+            const name = document.getElementById('s-name').value;
+            document.getElementById('lbl-student-name').textContent = name || 'الشاطر';
+            
+            // عرض المواد للطالب
+            const subjectsGrid = document.getElementById('subjects-grid');
+            subjectsGrid.innerHTML = subjects.map(subject => `
+                <div class="card" style="cursor: pointer; transition: all 0.3s;" onmouseover="this.style.boxShadow='0 8px 15px rgba(0,0,0,0.2)'" onmouseout="this.style.boxShadow='0 2px 5px rgba(0,0,0,0.05)'" onclick="loadTeachers('${subject}')">
+                    <h3 style="margin: 0; color: #007bff; font-size: 18px;">${subject}</h3>
+                    <p style="margin: 5px 0; color: #666; font-size: 12px;">50 مدرس متاح</p>
+                </div>
+            `).join('');
+            
+            showPanel('student-panel');
+        }
+
+        function loadTeachers(subject) {
+            const teachersGrid = document.getElementById('student-teachers-grid');
+            teachersGrid.innerHTML = teachers.map(teacher => `
+                <div class="card" style="text-align: right; transition: all 0.3s;" onmouseover="this.style.boxShadow='0 8px 15px rgba(0,0,0,0.2)'; this.style.transform='translateY(-5px)'" onmouseout="this.style.boxShadow='0 2px 5px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)'">
+                    <div class="circle-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 60px; height: 60px; font-size: 28px;">👨‍🏫</div>
+                    <h4 style="margin: 10px 0 5px 0; color: #1f2937; font-weight: bold;">${teacher.name}</h4>
+                    <p style="margin: 3px 0; color: #f59e0b; font-weight: bold;">⭐ ${teacher.rating}</p>
+                    <p style="margin: 3px 0; font-size: 12px; color: #666;">${teacher.students} طالب</p>
+                    <p style="margin: 10px 0 0 0; color: #28a745; font-weight: bold; font-size: 18px;">${teacher.price} جنيه/ساعة</p>
+                    <button class="btn btn-success" style="margin-top: 10px; font-size: 12px; padding: 8px;">احجز الآن</button>
+                </div>
+            `).join('');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function toggleMaintenance() {
+            const screen = document.getElementById('maintenance-screen');
+            screen.style.display = screen.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>
