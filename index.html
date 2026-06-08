@@ -5,82 +5,217 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة الشطار التعليمية - SHOTTAR PLATFORM</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f3f4f6; color: #111827; margin: 0; padding: 0; }
-        .dark-mode { background-color: #111827 !important; color: #f9fafb !important; }
-        .dark-mode .card, .dark-mode .sidebar { background: #1f2937 !important; color: #f9fafb !important; border-color: #374151 !important; }
-        .dark-mode input, .dark-mode select { background: #1f2937 !important; color: #f9fafb !important; border-color: #374151 !important; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f3f4f6; color: #111827; }
         
+        .dark-mode { background-color: #111827 !important; color: #f9fafb !important; }
+        .dark-mode .card, .dark-mode .sidebar, .dark-mode .register-container, .dark-mode .panel-header { 
+            background: #1f2937 !important; color: #f9fafb !important; border-color: #374151 !important; 
+        }
+        .dark-mode input, .dark-mode select, .dark-mode textarea { 
+            background: #374151 !important; color: #f9fafb !important; border-color: #4b5563 !important; 
+        }
+        
+        /* Notebook Logo */
         .notebook-logo {
-            background-color: #ffffff; border: 4px solid #007bff; border-radius: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+            border: 4px solid #007bff; border-radius: 12px;
             max-width: 360px; margin: 20px auto; padding: 15px; text-align: center;
             box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-left: 12px solid #3b82f6;
         }
-        .notebook-logo h1 { color: #1e3a8a; margin: 0; font-size: 24px; font-weight: bold; }
-        .notebook-logo p { color: #3b82f6; margin: 5px 0 0 0; font-size: 16px; font-weight: bold; letter-spacing: 1px; }
+        .notebook-logo h1 { color: #1e3a8a; margin: 0; font-size: 32px; font-weight: bold; }
+        .notebook-logo p { color: #3b82f6; margin: 5px 0 0 0; font-size: 16px; font-weight: bold; letter-spacing: 2px; }
 
-        .register-container { max-width: 550px; margin: 30px auto; background: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        /* Forms */
+        .register-container { 
+            max-width: 550px; margin: 30px auto; background: #ffffff; padding: 30px; 
+            border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+        }
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .btn { background-color: #007bff; color: white; padding: 12px; border: none; width: 100%; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #374151; }
+        .form-group input, .form-group select { 
+            width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 5px; 
+            box-sizing: border-box; font-size: 14px; transition: all 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus { 
+            outline: none; border-color: #007bff; box-shadow: 0 0 5px rgba(0,123,255,0.3);
+        }
+        
+        /* Buttons */
+        .btn { 
+            background-color: #007bff; color: white; padding: 12px; border: none; 
+            width: 100%; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;
+            transition: all 0.3s; margin: 5px 0;
+        }
+        .btn:hover { background-color: #0056b3; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,123,255,0.3); }
+        .btn:active { transform: translateY(0); }
         .btn-danger { background-color: #dc3545; }
+        .btn-danger:hover { background-color: #c82333; }
         .btn-success { background-color: #28a745; }
+        .btn-success:hover { background-color: #218838; }
+        .btn-small { padding: 8px 12px; width: auto; font-size: 12px; margin: 2px; }
         
-        #maintenance-screen { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:#111827; color:white; text-align:center; padding-top:20%; z-index:99999; font-size:30px; font-weight:bold; }
+        /* Maintenance Screen */
+        #maintenance-screen { 
+            display: none; position: fixed; top:0; left:0; width:100%; height:100%; 
+            background:#111827; color:white; text-align:center; padding-top:20%; 
+            z-index:99999; font-size:30px; font-weight:bold; animation: pulse 1s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
         
+        /* Panel Layout */
         .panel-layout { display: none; padding: 20px; }
-        .sidebar { width: 260px; background-color: #1f2937; color: #ffffff; position: fixed; top: 0; right: 0; bottom: 0; padding: 20px; box-sizing: border-box; z-index: 10; }
-        .sidebar h3 { text-align: center; color: #3b82f6; }
+        .sidebar { 
+            width: 260px; background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+            color: #ffffff; position: fixed; top: 0; right: 0; bottom: 0; 
+            padding: 20px; box-sizing: border-box; z-index: 10; overflow-y: auto;
+        }
+        .sidebar h3 { text-align: center; color: #3b82f6; margin-bottom: 20px; font-size: 18px; }
         .sidebar-menu { list-style: none; padding: 0; }
-        .sidebar-menu li { padding: 12px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .sidebar-menu li.active, .sidebar-menu li:hover { background-color: #007bff; color: white; }
-        .main-content { margin-right: 260px; padding: 20px; }
+        .sidebar-menu li { 
+            padding: 12px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; 
+            font-weight: bold; transition: all 0.3s; color: #d1d5db;
+        }
+        .sidebar-menu li:hover { background-color: #374151; color: #fff; }
+        .sidebar-menu li.active { background-color: #007bff; color: white; }
+        .main-content { margin-right: 280px; padding: 20px; }
         
+        /* Grid & Cards */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 15px; }
-        .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .circle-avatar { width: 70px; height: 70px; border-radius: 50%; background: #007bff; color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 10px; font-weight: bold; }
+        .card { 
+            background: white; border: 2px solid #e5e7eb; border-radius: 10px; padding: 20px; 
+            text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); border-color: #007bff; }
+        .circle-avatar { 
+            width: 80px; height: 80px; border-radius: 50%; background: #007bff; color: white; 
+            display: flex; align-items: center; justify-content: center; font-size: 32px; 
+            margin: 0 auto 15px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+        }
         
-        #alert-banner { display: none; background: #ffc107; color: #000; padding: 10px; text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 15px; border-radius: 5px; }
-        .theme-btn { position: fixed; bottom: 20px; left: 20px; padding: 10px; border-radius: 50%; width: 50px; height: 50px; background: #007bff; color: white; border: none; cursor: pointer; font-size: 20px; z-index: 1000; }
+        /* Alert Banner */
+        #alert-banner { 
+            display: block; background: linear-gradient(90deg, #ffc107 0%, #ff9800 100%);
+            color: #000; padding: 15px; text-align: center; font-weight: bold; 
+            font-size: 14px; margin-bottom: 15px; border-radius: 8px; animation: slideIn 0.5s;
+        }
+        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
-        .wallet-box { background: #e0f2fe; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 18px; color: #0369a1; margin-bottom: 20px; border: 1px dashed #0284c7; }
-        .payment-method { border: 2px solid #ccc; padding: 10px; border-radius: 8px; margin: 5px 0; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: bold; }
-        .payment-method.selected { border-color: #007bff; background: #e0f2fe; }
+        /* Theme Button */
+        .theme-btn { 
+            position: fixed; bottom: 20px; left: 20px; padding: 12px; border-radius: 50%; 
+            width: 50px; height: 50px; background: #007bff; color: white; border: none; 
+            cursor: pointer; font-size: 24px; z-index: 1000; transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+        }
+        .theme-btn:hover { transform: scale(1.1); }
+        
+        /* Wallet & Payment */
+        .wallet-box { 
+            background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%); padding: 20px; 
+            border-radius: 10px; font-weight: bold; font-size: 18px; color: #0369a1; 
+            margin-bottom: 20px; border: 2px dashed #0284c7; text-align: right;
+        }
+        .payment-method { 
+            border: 2px solid #ccc; padding: 15px; border-radius: 8px; margin: 8px 0; 
+            cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: bold;
+            transition: all 0.3s; text-align: right;
+        }
+        .payment-method:hover { background-color: #f0f9ff; border-color: #007bff; }
+        .payment-method.selected { border-color: #007bff; background: #e0f2fe; box-shadow: 0 4px 10px rgba(0,123,255,0.2); }
+        
+        /* Panel Header */
+        .panel-header { 
+            background: #1f2937; color: white; padding: 20px; border-radius: 10px; 
+            margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .panel-header h2 { margin: 0; font-size: 28px; }
+        
+        /* Stats */
+        .stat-box { 
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); 
+            color: white; padding: 20px; border-radius: 10px; text-align: right; 
+            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        }
+        .stat-box h4 { margin: 0 0 10px 0; font-size: 14px; opacity: 0.9; }
+        .stat-box .value { font-size: 32px; font-weight: bold; }
+        
+        /* Modal/Popup */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; }
+        .modal.show { display: flex; }
+        .modal-content { background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close-modal { font-size: 24px; cursor: pointer; color: #999; }
+        .close-modal:hover { color: #333; }
+        
+        /* Loading Spinner */
+        .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3;
+            border-top: 3px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .main-content { margin-right: 0; }
+            .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+            .panel-header { flex-direction: column; gap: 10px; }
+        }
     </style>
 </head>
 <body>
 
-    <button class="theme-btn" onclick="toggleTheme()">💡</button>
+    <button class="theme-btn" onclick="toggleTheme()" title="تبديل الوضع الليلي">💡</button>
 
-    <div id="maintenance-screen">⚙️ جاري تحديث منصة الشطار الآن... برجاء الانتظار والعودة بعد قليل 🚀</div>
+    <!-- Maintenance Screen -->
+    <div id="maintenance-screen">
+        <div style="background: rgba(0,0,0,0.7); padding: 40px; border-radius: 15px;">
+            ⚙️ جاري تحديث منصة الشطار الآن<br>
+            <span style="font-size: 20px; margin-top: 15px; display: block;">برجاء الانتظار والعودة بعد قليل 🚀</span>
+            <div class="spinner" style="margin: 20px auto;"></div>
+        </div>
+    </div>
 
+    <!-- ============= صفحة التسجيل ============= -->
     <div class="register-container" id="register-page">
         <div class="notebook-logo">
             <h1>منصة الشطار</h1>
             <p>SHOTTAR PLATFORM</p>
         </div>
-        <h3 style="text-align: center; color: #007bff;">إنشاء حساب طالب جديد</h3>
+        <h3 style="text-align: center; color: #007bff; margin-bottom: 20px;">إنشاء حساب طالب جديد</h3>
         
-        <div style="text-align: center; margin-bottom: 15px; background: #e0f2fe; padding: 10px; border-radius: 5px;">
-            <span style="font-weight: bold; font-size:13px;">دخول سريع للمعاينة لايف:</span><br>
-            <button type="button" class="btn" style="width:auto; padding:5px 10px; margin:5px; font-size:12px;" onclick="showPanel('admin-panel')">لوحة المدير</button>
-            <button type="button" class="btn" style="width:auto; padding:5px 10px; margin:5px; font-size:12px; background:#28a745;" onclick="showPanel('teacher-panel')">لوحة المدرس</button>
+        <div style="text-align: center; margin-bottom: 20px; background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%); padding: 15px; border-radius: 8px; border: 2px solid #0284c7;">
+            <span style="font-weight: bold; font-size: 14px; display: block; margin-bottom: 10px;">🔍 دخول سريع للمعاينة لايف:</span>
+            <button type="button" class="btn btn-small" onclick="showPanel('admin-panel'); populateAdminDashboard()">🛠️ لوحة المدير</button>
+            <button type="button" class="btn btn-small btn-success" onclick="showPanel('teacher-panel'); populateTeacherDashboard()">👨‍🏫 لوحة المدرس</button>
         </div>
 
         <form onsubmit="return false;">
-            <div class="form-group"><label>الاسم رباعي:</label><input type="text" id="s-name" placeholder="اكتب اسمك الرباعي هنا"></div>
-            <div class="form-group"><label>رقم موبايل الطالب:</label><input type="tel" id="s-phone" placeholder="01xxxxxxxxx"></div>
-            <div class="form-group"><label>رقم موبايل ولي الأمر:</label><input type="tel" placeholder="رقم الوالد أو الوالدة"></div>
             <div class="form-group">
-                <label>المحافظة:</label>
+                <label>🔤 الاسم رباعي:</label>
+                <input type="text" id="s-name" placeholder="اكتب اسمك الرباعي هنا">
+            </div>
+            <div class="form-group">
+                <label>📱 رقم موبايل الطالب:</label>
+                <input type="tel" id="s-phone" placeholder="01xxxxxxxxx">
+            </div>
+            <div class="form-group">
+                <label>👨‍👩‍👧 رقم موبايل ولي الأمر:</label>
+                <input type="tel" id="s-parent-phone" placeholder="رقم الوالد أو الوالدة">
+            </div>
+            <div class="form-group">
+                <label>🗺️ المحافظة:</label>
                 <select id="s-gov">
                     <option value="">اختر محافظتك</option>
                     <option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option><option>الدقهلية</option><option>الشرقية</option><option>المنوفية</option><option>القليوبية</option><option>البحيرة</option><option>الغربية</option><option>بور سعيد</option><option>دمياط</option><option>الإسماعيلية</option><option>السويس</option><option>كفر الشيخ</option><option>الفيوم</option><option>بني سويف</option><option>المنيا</option><option>أسيوط</option><option>سوهاج</option><option>قنا</option><option>الأقصر</option><option>أسوان</option>
                 </select>
             </div>
-            <div class="form-group"><label>المركز / المدينة:</label><input type="text" placeholder="مثال: مركز أبو كبير"></div>
             <div class="form-group">
-                <label>الفصل الدراسي (السنة الدراسية):</label>
+                <label>🏙️ المركز / المدينة:</label>
+                <input type="text" id="s-city" placeholder="مثال: مركز أبو كبير">
+            </div>
+            <div class="form-group">
+                <label>📚 الفصل الدراسي (السنة الدراسية):</label>
                 <select id="s-grade" onchange="handleGradeChange()">
                     <option value="">اختر سنتك الدراسية</option>
                     <option value="1_general">الصف الأول الثانوي (عام + بكالوريا)</option>
@@ -91,120 +226,395 @@
                     <option value="3_azhar">الصف الثالث الثانوي (أزهري)</option>
                 </select>
             </div>
-            <div class="form-group" id="box-gen-branch" style="display: none;"><label>المسار التخصصي:</label><select id="s-gen-branch"><option value="science">علمي علوم / الطب وعلوم الحياة</option><option value="math">علمي رياضة / الهندسة والحاسب</option><option value="arts_biz">أدبي / الأعمال</option><option value="arts_art">أدبي / الآداب والفنون</option></select></div>
-            <div class="form-group" id="box-az-branch" style="display: none;"><label>الشعبة الأزهري:</label><select id="s-az-branch"><option value="az_science">علمي</option><option value="az_arts">أدبي</option></select></div>
-            <div class="form-group"><label>البريد الإلكتروني:</label><input type="email" placeholder="name@example.com"></div>
-            <div class="form-group"><label>كلمة المرور:</label><input type="password" placeholder="اختر باسورد قوي"></div>
-            <button type="button" class="btn" onclick="registerStudent()">إنشاء حساب ودخول منصة الشطار</button>
+            <div class="form-group" id="box-gen-branch" style="display: none;">
+                <label>🎯 المسار التخصصي:</label>
+                <select id="s-gen-branch">
+                    <option value="science">علمي علوم / الطب وعلوم الحياة</option>
+                    <option value="math">علمي رياضة / الهندسة والحاسب</option>
+                    <option value="arts_biz">أدبي / الأعمال</option>
+                    <option value="arts_art">أدبي / الآداب والفنون</option>
+                </select>
+            </div>
+            <div class="form-group" id="box-az-branch" style="display: none;">
+                <label>📖 الشعبة الأزهري:</label>
+                <select id="s-az-branch">
+                    <option value="az_science">علمي</option>
+                    <option value="az_arts">أدبي</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>✉️ البريد الإلكتروني:</label>
+                <input type="email" id="s-email" placeholder="name@example.com">
+            </div>
+            <div class="form-group">
+                <label>🔐 كلمة المرور:</label>
+                <input type="password" id="s-password" placeholder="اختر باسورد قوي">
+            </div>
+            <button type="button" class="btn btn-success" onclick="registerStudent()" style="margin-top: 20px;">✅ إنشاء حساب ودخول منصة الشطار</button>
         </form>
     </div>
 
+    <!-- ============= لوحة تحكم الطالب ============= -->
     <div class="panel-layout" id="student-panel">
         <div class="sidebar">
             <h3>📖 منصة الشطار</h3>
-            <ul class="sidebar-menu"><li class="active">👨‍🏫 مدرسيني</li><li>📚 كورساتي</li><li>📝 واجباتي</li><li>✏️ امتحاناتي</li><li onclick="location.reload()">🚪 خروج</li></ul>
+            <ul class="sidebar-menu">
+                <li class="active" onclick="switchStudentTab('teachers')">👨‍🏫 مدرسيني</li>
+                <li onclick="switchStudentTab('courses')">📚 كورساتي</li>
+                <li onclick="switchStudentTab('homework')">📝 واجباتي</li>
+                <li onclick="switchStudentTab('exams')">✏️ امتحاناتي</li>
+                <li onclick="switchStudentTab('payment')">💳 الدفع والمحفظة</li>
+                <li onclick="logout()">🚪 خروج</li>
+            </ul>
         </div>
         <div class="main-content">
             <div id="alert-banner">📣 إشعار عاجل من المدرس: غداً امتحان شامل على الباب الأول يرجى الاستعداد!</div>
             
-            <div style="display:flex; gap:20px;">
-                <div class="wallet-box" style="flex:1;">💰 رصيد محفظتك الحالي: <span id="lbl-student-balance" style="color:#16a34a; font-size:22px;">0</span> جنيه</div>
-                <div class="wallet-box" style="flex:1; background:#fef3c7; color:#b45309; border-color:#d97706;">🔑 كود الشحن الفريد الخاص بك: <span id="lbl-student-code">SH-109</span></div>
+            <!-- Tab: Teachers -->
+            <div id="tab-teachers" class="tab-content">
+                <h2 style="text-align: right; color: #007bff;">أهلاً بك يا <span id="lbl-student-name">الشاطر</span> 👋</h2>
+                <p style="text-align: right; color: #666; font-size: 16px;">اضغط على المادة لإظهار المدرسين المتاحين:</p>
+                <div class="grid" id="subjects-grid"></div>
+                <h3 style="margin-top: 40px; border-bottom: 3px solid #007bff; padding-bottom: 10px; text-align: right;">👨‍🏫 المدرسين المتاحين:</h3>
+                <div class="grid" id="student-teachers-grid"></div>
             </div>
 
-            <div class="card" style="text-align:right; margin-bottom:20px; background:#fff;">
-                <h4 style="margin:0 0 10px 0; color:#007bff;">💳 شحن المحفظة الفوري والتلقائي:</h4>
-                <p>اختر طريقة الدفع المفضلة لديك:</p>
-                <div class="payment-method selected" onclick="selectMethod('cash')">📱 فودافون كاش (رقمنا الموحد: 01012345678)</div>
-                <div class="payment-method" onclick="selectMethod('fawry')">🔲 فوري (كود الخدمة: 7890)</div>
-                <div class="payment-method" onclick="selectMethod('huawei')">🛍️ هواوي باي (Huawei Pay)</div>
-                <div class="payment-method" onclick="selectMethod('orange')">🟠 أورنج موني (Orange Money)</div>
-                <div class="payment-method" onclick="selectMethod('etisalat')">🟡 إتصالات كاش (Etisalat Cash)</div>
+            <!-- Tab: Courses -->
+            <div id="tab-courses" class="tab-content" style="display: none;">
+                <h2 style="color: #007bff; text-align: right;">📚 كورساتي</h2>
+                <div class="grid" id="courses-grid"></div>
             </div>
 
-            <h2 style="text-align:right; color:#007bff; margin-top:30px;">أهلاً بك يا <span id="lbl-student-name">الشاطر</span> 👋</h2>
-            <p style="text-align:right; color:#666;">اضغط على المادة لإظهار الـ 50 مدرس المتاحين لها على المنصة فوراً:</p>
-            <div class="grid" id="subjects-grid"><!-- المواد بتنزل هنا ذكياً --></div>
-            <h3 style="margin-top:40px; border-bottom:2px solid #ccc; padding-bottom:10px; text-align:right;">المدرسين المتاحين للمادة المختارة:</h3>
-            <div class="grid" id="student-teachers-grid"></div>
+            <!-- Tab: Homework -->
+            <div id="tab-homework" class="tab-content" style="display: none;">
+                <h2 style="color: #007bff; text-align: right;">📝 واجباتي</h2>
+                <div id="homework-list"></div>
+            </div>
+
+            <!-- Tab: Exams -->
+            <div id="tab-exams" class="tab-content" style="display: none;">
+                <h2 style="color: #007bff; text-align: right;">✏️ امتحاناتي</h2>
+                <div id="exams-list"></div>
+            </div>
+
+            <!-- Tab: Payment -->
+            <div id="tab-payment" class="tab-content" style="display: none;">
+                <h2 style="color: #007bff; text-align: right;">💳 الدفع والمحفظة</h2>
+                <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                    <div class="wallet-box" style="flex: 1; background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);">
+                        💰 رصيد محفظتك: <span id="lbl-student-balance" style="color: #16a34a; font-size: 26px;">500</span> جنيه
+                    </div>
+                    <div class="wallet-box" style="flex: 1; background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%); color: #b45309; border-color: #d97706;">
+                        🔑 كود الشحن: <span id="lbl-student-code">SH-109</span>
+                    </div>
+                </div>
+
+                <div class="card" style="text-align: right; margin-bottom: 20px;">
+                    <h4 style="margin: 0 0 15px 0; color: #007bff; font-size: 18px;">💳 طرق الدفع المتاحة:</h4>
+                    <div class="payment-method selected" onclick="selectMethod(event, 'cash')">
+                        <span style="flex: 1;"></span>
+                        <span>📱 فودافون كاش | 01012345678</span>
+                    </div>
+                    <div class="payment-method" onclick="selectMethod(event, 'fawry')">
+                        <span style="flex: 1;"></span>
+                        <span>🔲 فوري | كود: 7890</span>
+                    </div>
+                    <div class="payment-method" onclick="selectMethod(event, 'huawei')">
+                        <span style="flex: 1;"></span>
+                        <span>🛍️ هواوي باي | Huawei Pay</span>
+                    </div>
+                    <div class="payment-method" onclick="selectMethod(event, 'orange')">
+                        <span style="flex: 1;"></span>
+                        <span>🟠 أورنج موني | Orange Money</span>
+                    </div>
+                    <div class="payment-method" onclick="selectMethod(event, 'etisalat')">
+                        <span style="flex: 1;"></span>
+                        <span>🟡 إتصالات كاش | Etisalat</span>
+                    </div>
+                    <button class="btn btn-success" style="margin-top: 15px;" onclick="confirmPayment()">✅ تأكيد الدفع والشحن</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- لوحة تحكم المدير -->
-    <div class="panel-layout" id="admin-panel" style="margin-right:0;">
-        <div style="background:#1f2937; color:white; padding:15px; border-radius:8px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
-            <h2>🛠️ لوحة تحكم المدير العام</h2>
-            <button class="btn btn-danger" style="width:auto;" id="btn-toggle-maintenance" onclick="toggleMaintenance()">🔒 قفل وتحديث المنصة</button>
-        </div>
-        <div class="grid">
-            <div class="card" style="text-align:right;">
-                <div class="circle-avatar" style="background:#10b981;">👥</div>
-                <h4>إجمالي الطلاب</h4>
-                <p style="font-size:24px; color:#10b981; font-weight:bold;">1,245</p>
-            </div>
-            <div class="card" style="text-align:right;">
-                <div class="circle-avatar" style="background:#f59e0b;">👨‍🏫</div>
-                <h4>عدد المدرسين</h4>
-                <p style="font-size:24px; color:#f59e0b; font-weight:bold;">89</p>
-            </div>
-            <div class="card" style="text-align:right;">
-                <div class="circle-avatar" style="background:#8b5cf6;">💰</div>
-                <h4>إجمالي الإيرادات</h4>
-                <p style="font-size:24px; color:#8b5cf6; font-weight:bold;">45,000 EGP</p>
-            </div>
-            <div class="card" style="text-align:right;">
-                <div class="circle-avatar" style="background:#06b6d4;">📊</div>
-                <h4>التقارير</h4>
-                <p style="font-size:24px; color:#06b6d4; font-weight:bold;">124</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- لوحة تحكم المدرس -->
-    <div class="panel-layout" id="teacher-panel">
+    <!-- ============= لوحة تحكم المدير ============= -->
+    <div class="panel-layout" id="admin-panel">
         <div class="sidebar">
-            <h3>📖 منصة الشطار</h3>
-            <ul class="sidebar-menu"><li class="active">👨‍🎓 طلابي</li><li>📹 دروسي</li><li>📊 إحصائياتي</li><li>💼 عقدي</li><li onclick="location.reload()">���� خروج</li></ul>
+            <h3>🛠️ لوحة المدير</h3>
+            <ul class="sidebar-menu">
+                <li class="active" onclick="switchAdminTab('dashboard')">📊 لوحة التحكم</li>
+                <li onclick="switchAdminTab('students')">👥 إدارة الطلاب</li>
+                <li onclick="switchAdminTab('teachers')">👨‍🏫 إدارة المدرسين</li>
+                <li onclick="switchAdminTab('reports')">📈 التقارير</li>
+                <li onclick="switchAdminTab('settings')">⚙️ الإعدادات</li>
+                <li onclick="logout()">🚪 خروج</li>
+            </ul>
         </div>
         <div class="main-content">
-            <h2>أهلاً يا <span id="lbl-teacher-name" style="color:#28a745;">معلم الشطار</span> 👋</h2>
-            <p style="color:#666;">مرحباً بك في لوحة التحكم - إدارة دروسك وطلابك وإحصائياتك</p>
-            
-            <h3 style="margin-top:30px; color:#28a745; border-bottom:3px solid #28a745; padding-bottom:10px;">📊 إحصائياتي</h3>
-            <div class="grid">
-                <div class="card" style="text-align:right;">
-                    <div class="circle-avatar" style="background:#28a745;">👥</div>
-                    <h4>عدد طلابي</h4>
-                    <p style="font-size:24px; color:#28a745; font-weight:bold;">567</p>
+            <!-- Tab: Dashboard -->
+            <div id="tab-admin-dashboard" class="tab-content">
+                <div class="panel-header">
+                    <button class="btn btn-danger" style="width: auto; padding: 10px 20px;" onclick="toggleMaintenance()">🔒 قفل وتحديث المنصة</button>
+                    <h2>🛠️ لوحة تحكم المدير العام</h2>
                 </div>
-                <div class="card" style="text-align:right;">
-                    <div class="circle-avatar" style="background:#3b82f6;">📹</div>
-                    <h4>عدد الدروس</h4>
-                    <p style="font-size:24px; color:#3b82f6; font-weight:bold;">42</p>
-                </div>
-                <div class="card" style="text-align:right;">
-                    <div class="circle-avatar" style="background:#f59e0b;">⭐</div>
-                    <h4>التقييم</h4>
-                    <p style="font-size:24px; color:#f59e0b; font-weight:bold;">4.8/5</p>
-                </div>
-                <div class="card" style="text-align:right;">
-                    <div class="circle-avatar" style="background:#10b981;">💵</div>
-                    <h4>الأرباح الشهرية</h4>
-                    <p style="font-size:24px; color:#10b981; font-weight:bold;">12,500 EGP</p>
+                <div class="grid">
+                    <div class="stat-box">
+                        <h4>👥 إجمالي الطلاب</h4>
+                        <div class="value">1,245</div>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);">
+                        <h4>👨‍🏫 عدد المدرسين</h4>
+                        <div class="value">89</div>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                        <h4>💰 إجمالي الإيرادات</h4>
+                        <div class="value">45,000</div>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                        <h4>📊 التقارير</h4>
+                        <div class="value">124</div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Tab: Students -->
+            <div id="tab-admin-students" class="tab-content" style="display: none;">
+                <h2 style="color: #007bff; text-align: right;">👥 إدارة الطلاب</h2>
+                <div style="margin-bottom: 20px;">
+                    <button class="btn btn-success btn-small" onclick="showModal('addStudentModal')">➕ إضافة طالب جديد</button>
+                    <button class="btn btn-small" onclick="searchStudents()">🔍 بحث</button>
+                </div>
+                <div id="students-list" style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: right;">
+                        <tr style="background: #1f2937; color: white;">
+                            <th style="padding: 12px; border: 1px solid #e5e7eb;">الاسم</th>
+                            <th style="padding: 12px; border: 1px solid #e5e7eb;">المحافظة</th>
+                            <th style="padding: 12px; border: 1px solid #e5e7eb;">الفصل</th>
+                            <th style="padding: 12px; border: 1px solid #e5e7eb;">الإجراءات</th>
+                        </tr>
+                        <tr style="border: 1px solid #e5e7eb;">
+                            <td style="padding: 12px;">محمود علي السيد</td>
+                            <td style="padding: 12px;">القاهرة</td>
+                            <td style="padding: 12px;">الثالث الثانوي</td>
+                            <td style="padding: 12px;">
+                                <button class="btn btn-small" onclick="editStudent()">✏️ تعديل</button>
+                                <button class="btn btn-danger btn-small" onclick="deleteStudent()">🗑️ حذف</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab: Teachers -->
+            <div id="tab-admin-teachers" class="tab-content" style="display: none;">
+                <h2 style="color: #007bff; text-align: right;">👨‍🏫 إدارة المدرسين</h2>
+                <button class="btn btn-success btn-small" onclick="showModal('addTeacherModal')">➕ إضافة مدرس جديد</button>
+                <div class="grid" style="margin-top: 20px;">
+                    <div class="card" style="text-align: right;">
+                        <div class="circle-avatar" style="background: #28a745;">👨‍🏫</div>
+                        <h4>أ. محمود عبدالله</h4>
+                        <p style="color: #f59e0b;">⭐ 4.8</p>
+                        <p style="color: #666;">567 طالب</p>
+                        <button class="btn btn-small" onclick="viewTeacherDetails()">عرض التفاصيل</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Reports -->
+            <div id="tab-admin-reports" class="tab-content" style="display: none;">
+                <h2 style="color: #007bff; text-align: right;">📈 التقارير والإحصائيات</h2>
+                <button class="btn btn-small" onclick="downloadReport()">📥 تحميل التقرير</button>
+                <div class="grid" style="margin-top: 20px;">
+                    <div class="card" style="text-align: right;">
+                        <h4>النمو الشهري</h4>
+                        <p style="font-size: 24px; color: #28a745; margin: 15px 0;">↑ 23%</p>
+                    </div>
+                    <div class="card" style="text-align: right;">
+                        <h4>رضا الطلاب</h4>
+                        <p style="font-size: 24px; color: #f59e0b; margin: 15px 0;">4.7/5 ⭐</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Settings -->
+            <div id="tab-admin-settings" class="tab-content" style="display: none;">
+                <h2 style="color: #007bff; text-align: right;">⚙️ الإعدادات</h2>
+                <div class="card" style="text-align: right; max-width: 600px;">
+                    <h4 style="margin-bottom: 15px;">إعدادات عامة:</h4>
+                    <div class="form-group">
+                        <label>اسم المنصة:</label>
+                        <input type="text" value="منصة الشطار التعليمية">
+                    </div>
+                    <div class="form-group">
+                        <label>البريد الإلكتروني الإداري:</label>
+                        <input type="email" value="admin@shottar.com">
+                    </div>
+                    <div class="form-group">
+                        <label>الهاتف:</label>
+                        <input type="tel" value="01012345678">
+                    </div>
+                    <button class="btn btn-success" onclick="saveSettings()">💾 حفظ الإعدادات</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============= لوحة تحكم المدرس ============= -->
+    <div class="panel-layout" id="teacher-panel">
+        <div class="sidebar">
+            <h3>👨‍🏫 لوحة المدرس</h3>
+            <ul class="sidebar-menu">
+                <li class="active" onclick="switchTeacherTab('dashboard')">📊 الرئيسية</li>
+                <li onclick="switchTeacherTab('students')">👥 طلابي</li>
+                <li onclick="switchTeacherTab('lessons')">📹 دروسي</li>
+                <li onclick="switchTeacherTab('earnings')">💵 أرباحي</li>
+                <li onclick="switchTeacherTab('profile')">👤 ملفي الشخصي</li>
+                <li onclick="logout()">🚪 خروج</li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <!-- Tab: Dashboard -->
+            <div id="tab-teacher-dashboard" class="tab-content">
+                <h2 style="color: #28a745;">أهلاً يا <span id="lbl-teacher-name">معلم الشطار</span> 👋</h2>
+                <p style="color: #666; text-align: right;">مرحباً بك في لوحة التحكم الخاصة بك</p>
+                
+                <div class="grid" style="margin-top: 30px;">
+                    <div class="stat-box" style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);">
+                        <h4>👥 عدد طلابي</h4>
+                        <div class="value">567</div>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);">
+                        <h4>📹 عدد الدروس</h4>
+                        <div class="value">42</div>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                        <h4>⭐ التقييم</h4>
+                        <div class="value">4.8/5</div>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #10b981 0%, #047857 100%);">
+                        <h4>💵 الأرباح الشهرية</h4>
+                        <div class="value">12,500</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Students -->
+            <div id="tab-teacher-students" class="tab-content" style="display: none;">
+                <h2 style="color: #28a745; text-align: right;">👥 طلابي</h2>
+                <div class="grid">
+                    <div class="card" style="text-align: right;">
+                        <div class="circle-avatar" style="background: #3b82f6;">👨‍🎓</div>
+                        <h4>علي محمد أحمد</h4>
+                        <p style="color: #666;">الرياضيات - الثالث الثانوي</p>
+                        <button class="btn btn-small" onclick="sendMessage()">💬 رسالة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Lessons -->
+            <div id="tab-teacher-lessons" class="tab-content" style="display: none;">
+                <h2 style="color: #28a745; text-align: right;">📹 دروسي</h2>
+                <button class="btn btn-success btn-small" onclick="showModal('addLessonModal')">➕ إضافة درس جديد</button>
+                <div class="grid" style="margin-top: 20px;">
+                    <div class="card" style="text-align: right;">
+                        <h4>مقدمة في الجبر</h4>
+                        <p style="color: #666;">📅 2026-06-08</p>
+                        <p style="color: #28a745;">👥 45 طالب</p>
+                        <button class="btn btn-small" onclick="editLesson()">✏️ تعديل</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Earnings -->
+            <div id="tab-teacher-earnings" class="tab-content" style="display: none;">
+                <h2 style="color: #28a745; text-align: right;">💵 أرباحي</h2>
+                <div class="card" style="text-align: right; max-width: 500px;">
+                    <h4>الأرباح التفصيلية:</h4>
+                    <p style="margin: 10px 0;">📅 الشهر الحالي: <span style="color: #28a745; font-weight: bold;">12,500 جنيه</span></p>
+                    <p style="margin: 10px 0;">📅 الشهر السابق: <span style="color: #28a745; font-weight: bold;">11,200 جنيه</span></p>
+                    <p style="margin: 10px 0;">📅 الإجمالي: <span style="color: #28a745; font-weight: bold; font-size: 20px;">95,000 جنيه</span></p>
+                    <button class="btn btn-small" onclick="withdrawEarnings()">🏧 سحب الأرباح</button>
+                </div>
+            </div>
+
+            <!-- Tab: Profile -->
+            <div id="tab-teacher-profile" class="tab-content" style="display: none;">
+                <h2 style="color: #28a745; text-align: right;">👤 ملفي الشخصي</h2>
+                <div class="card" style="text-align: right; max-width: 500px;">
+                    <div class="circle-avatar" style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);">👨‍🏫</div>
+                    <h4>أ. محمود عبدالله</h4>
+                    <p style="color: #666;">الرياضيات والفيزياء</p>
+                    <form style="margin-top: 20px;">
+                        <div class="form-group">
+                            <label>الاسم:</label>
+                            <input type="text" value="محمود عبدالله">
+                        </div>
+                        <div class="form-group">
+                            <label>المادة:</label>
+                            <input type="text" value="الرياضيات">
+                        </div>
+                        <div class="form-group">
+                            <label>السعر/ساعة:</label>
+                            <input type="number" value="150">
+                        </div>
+                        <button type="button" class="btn btn-success" onclick="saveProfile()">💾 حفظ التعديلات</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="addStudentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة طالب جديد</h3>
+                <span class="close-modal" onclick="closeModal('addStudentModal')">×</span>
+            </div>
+            <div class="form-group">
+                <label>الاسم:</label>
+                <input type="text" placeholder="اسم الطالب">
+            </div>
+            <button class="btn btn-success" onclick="saveStudent()">✅ حفظ</button>
+        </div>
+    </div>
+
+    <div class="modal" id="addTeacherModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة مدرس جديد</h3>
+                <span class="close-modal" onclick="closeModal('addTeacherModal')">×</span>
+            </div>
+            <div class="form-group">
+                <label>الاسم:</label>
+                <input type="text" placeholder="اسم المدرس">
+            </div>
+            <button class="btn btn-success" onclick="saveTeacher()">✅ حفظ</button>
+        </div>
+    </div>
+
+    <div class="modal" id="addLessonModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة درس جديد</h3>
+                <span class="close-modal" onclick="closeModal('addLessonModal')">×</span>
+            </div>
+            <div class="form-group">
+                <label>عنوان الدرس:</label>
+                <input type="text" placeholder="مثال: مقدمة في الجبر">
+            </div>
+            <button class="btn btn-success" onclick="saveLesson()">✅ إضافة الدرس</button>
         </div>
     </div>
 
     <script>
-        // ضبط المواد الدراسية (المادة = 50 مدرس)
+        // ============= البيانات الأساسية =============
         const subjects = [
             "🧪 الكيمياء", "🔬 الفيزياء", "📐 الرياضيات", "📚 اللغة العربية", "🌍 الجغرافيا",
-            "📖 اللغة الإنجليزية", "🏛️ التاريخ", "🧬 الأحياء", "💻 الحاسوب", "🎨 الفنون",
-            "📝 اللغة الفرنسية", "⚙️ الهندسة", "🎵 التربية الموسيقية", "🏃 التربية الرياضية", "⚗️ الكيمياء (ثانية)"
+            "📖 اللغة الإنجليزية", "🏛️ التاريخ", "🧬 الأحياء", "💻 الحاسوب", "🎨 الفنون"
         ];
 
-        const teachers = Array.from({length: 50}, (_, i) => ({
+        const teachersData = Array.from({length: 50}, (_, i) => ({
             id: i + 1,
             name: `أ. ${['محمود', 'فاطمة', 'علي', 'أمينة', 'محمد', 'زينب', 'أحمد', 'نور', 'خالد', 'سارة'][i % 10]} ${['الشرقاوي', 'محمد', 'إبراهيم', 'أحمد', 'علوان', 'السيد', 'محمود', 'علي', 'حسن', 'عبدالله'][Math.floor(i / 10)]}`,
             rating: (4.5 + Math.random() * 0.5).toFixed(1),
@@ -213,11 +623,241 @@
             subject: subjects[Math.floor(Math.random() * subjects.length)]
         }));
 
+        let currentPaymentMethod = 'cash';
+        let currentStudentName = 'الشاطر';
+
+        // ============= دوال التبديل بين التبويبات =============
+        function switchStudentTab(tabName) {
+            document.querySelectorAll('#student-panel .tab-content').forEach(tab => tab.style.display = 'none');
+            document.getElementById(`tab-${tabName}`).style.display = 'block';
+            
+            document.querySelectorAll('#student-panel .sidebar-menu li').forEach(li => li.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (tabName === 'courses') populateCourses();
+            if (tabName === 'homework') populateHomework();
+            if (tabName === 'exams') populateExams();
+        }
+
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('#admin-panel .tab-content').forEach(tab => tab.style.display = 'none');
+            document.getElementById(`tab-admin-${tabName}`).style.display = 'block';
+            
+            document.querySelectorAll('#admin-panel .sidebar-menu li').forEach(li => li.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function switchTeacherTab(tabName) {
+            document.querySelectorAll('#teacher-panel .tab-content').forEach(tab => tab.style.display = 'none');
+            document.getElementById(`tab-teacher-${tabName}`).style.display = 'block';
+            
+            document.querySelectorAll('#teacher-panel .sidebar-menu li').forEach(li => li.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // ============= دوال التسجيل والتسجيل الخروج =============
+        function registerStudent() {
+            const name = document.getElementById('s-name').value || 'الشاطر';
+            const phone = document.getElementById('s-phone').value;
+            const email = document.getElementById('s-email').value;
+
+            if (!name || !phone || !email) {
+                alert('❌ من فضلك ملأ جميع الحقول المطلوبة!');
+                return;
+            }
+
+            currentStudentName = name;
+            document.getElementById('lbl-student-name').textContent = name;
+            populateSubjects();
+            showPanel('student-panel');
+            alert(`✅ مرحباً ${name} في منصة الشطار!`);
+        }
+
+        function logout() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                showPanel('register-page');
+                document.querySelectorAll('input').forEach(input => input.value = '');
+            }
+        }
+
+        // ============= دوال واجهة الطالب =============
+        function populateSubjects() {
+            const grid = document.getElementById('subjects-grid');
+            grid.innerHTML = subjects.map(subject => `
+                <div class="card" style="cursor: pointer; text-align: right;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onclick="loadTeachers('${subject}')">
+                    <h3 style="margin: 0; color: #007bff; font-size: 20px;">${subject}</h3>
+                    <p style="margin: 10px 0; color: #666;">50 مدرس متاح</p>
+                    <button class="btn btn-small" style="margin-top: 10px;">عرض المدرسين →</button>
+                </div>
+            `).join('');
+        }
+
+        function loadTeachers(subject) {
+            const grid = document.getElementById('student-teachers-grid');
+            grid.innerHTML = teachersData.map(teacher => `
+                <div class="card" style="text-align: right;">
+                    <div class="circle-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 70px; height: 70px; font-size: 32px;">👨‍🏫</div>
+                    <h4 style="margin: 10px 0 5px 0;">${teacher.name}</h4>
+                    <p style="margin: 3px 0; color: #f59e0b; font-weight: bold;">⭐ ${teacher.rating}</p>
+                    <p style="margin: 3px 0; font-size: 12px; color: #666;">${teacher.students} طالب</p>
+                    <p style="margin: 10px 0 0 0; color: #28a745; font-weight: bold; font-size: 18px;">${teacher.price} جنيه/ساعة</p>
+                    <button class="btn btn-success btn-small" onclick="bookTeacher('${teacher.name}', ${teacher.price})">📅 احجز الآن</button>
+                </div>
+            `).join('');
+        }
+
+        function bookTeacher(name, price) {
+            alert(`✅ تم حجز جلسة مع ${name}\nالسعر: ${price} جنيه\nشكراً لك!`);
+        }
+
+        function populateCourses() {
+            const grid = document.getElementById('courses-grid');
+            grid.innerHTML = `
+                <div class="card" style="text-align: right;">
+                    <h4>📐 مقدمة في الجبر</h4>
+                    <p style="color: #666;">👨‍🏫 أ. محمود</p>
+                    <p style="color: #28a745;">✅ مكتمل</p>
+                    <button class="btn btn-small" onclick="viewCourse()">عرض الدرس</button>
+                </div>
+                <div class="card" style="text-align: right;">
+                    <h4>🔬 أساسيات الفيزياء</h4>
+                    <p style="color: #666;">👨‍🏫 أ. علي</p>
+                    <p style="color: #f59e0b;">⏳ قيد الدراسة</p>
+                    <button class="btn btn-small" onclick="continueCourse()">متابعة</button>
+                </div>
+            `;
+        }
+
+        function populateHomework() {
+            const list = document.getElementById('homework-list');
+            list.innerHTML = `
+                <div class="card" style="text-align: right; margin: 10px 0;">
+                    <h4>📝 واجب الجبر</h4>
+                    <p style="color: #666;">المسائل من 1 إلى 10</p>
+                    <p style="color: #f59e0b;">⏰ موعد التسليم: غداً</p>
+                    <button class="btn btn-small" onclick="submitHomework()">📤 أرسل الحل</button>
+                </div>
+                <div class="card" style="text-align: right; margin: 10px 0;">
+                    <h4>✏️ واجب الفيزياء</h4>
+                    <p style="color: #666;">حل التمارين</p>
+                    <p style="color: #28a745;">✅ تم التسليم</p>
+                </div>
+            `;
+        }
+
+        function populateExams() {
+            const list = document.getElementById('exams-list');
+            list.innerHTML = `
+                <div class="card" style="text-align: right; margin: 10px 0;">
+                    <h4>✏️ اختبار الجبر</h4>
+                    <p style="color: #666;">📅 غداً - 10:00 ص</p>
+                    <p style="color: #28a745;">⭐ درجتك: 95/100</p>
+                    <button class="btn btn-small" onclick="viewExamResult()">عرض الإجابات</button>
+                </div>
+                <div class="card" style="text-align: right; margin: 10px 0;">
+                    <h4>✏️ اختبار الفيزياء</h4>
+                    <p style="color: #666;">📅 بعد غد - 02:00 م</p>
+                    <button class="btn btn-small" onclick="startExam()">🚀 ابدأ الامتحان</button>
+                </div>
+            `;
+        }
+
+        function selectMethod(event, method) {
+            currentPaymentMethod = method;
+            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+        }
+
+        function confirmPayment() {
+            const methods = {
+                'cash': 'فودافون كاش',
+                'fawry': 'فوري',
+                'huawei': 'هواوي باي',
+                'orange': 'أورنج موني',
+                'etisalat': 'إتصالات كاش'
+            };
+            alert(`✅ تم تأكيد الدفع عبر ${methods[currentPaymentMethod]}\nسيتم تحديث رصيدك قريباً!`);
+        }
+
+        // ============= دوال لوحة المدير =============
+        function populateAdminDashboard() {
+            // البيانات موجودة بالفعل في الـ HTML
+        }
+
+        function searchStudents() {
+            alert('🔍 بحث عن طالب...');
+        }
+
+        function editStudent() {
+            alert('✏️ تعديل بيانات الطالب');
+        }
+
+        function deleteStudent() {
+            if (confirm('هل أنت متأكد من حذف الطالب؟')) {
+                alert('✅ تم حذف الطالب بنجاح');
+            }
+        }
+
+        function viewTeacherDetails() {
+            alert('👨‍🏫 تفاصيل المدرس:\nالاسم: أ. محمود عبدالله\nالمادة: الرياضيات\nالتقييم: 4.8/5\nالطلاب: 567');
+        }
+
+        function downloadReport() {
+            alert('📥 جاري تحميل التقرير...');
+        }
+
+        function saveSettings() {
+            alert('💾 تم حفظ الإعدادات بنجاح');
+        }
+
+        // ============= دوال لوحة المدرس =============
+        function populateTeacherDashboard() {
+            // البيانات موجودة بالفعل في الـ HTML
+        }
+
+        function sendMessage() {
+            alert('💬 إرسال رسالة للطالب...');
+        }
+
+        function editLesson() {
+            alert('✏️ تعديل الدرس...');
+        }
+
+        function withdrawEarnings() {
+            alert('🏧 اطلب سحب الأرباح\nالمبلغ: 12,500 جنيه\nسيتم التحويل في خلال 3-5 أيام');
+        }
+
+        function saveProfile() {
+            alert('💾 تم حفظ ملفك الشخصي بنجاح');
+        }
+
+        // ============= دوال Modal =============
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function saveStudent() {
+            alert('✅ تم إضافة الطالب بنجاح');
+            closeModal('addStudentModal');
+        }
+
+        function saveTeacher() {
+            alert('✅ تم إضافة المدرس بنجاح');
+            closeModal('addTeacherModal');
+        }
+
+        function saveLesson() {
+            alert('✅ تم إضافة الدرس بنجاح');
+            closeModal('addLessonModal');
+        }
+
+        // ============= دوال عامة =============
         function showPanel(panelId) {
-            document.getElementById('register-page').style.display = 'none';
-            document.getElementById('student-panel').style.display = 'none';
-            document.getElementById('admin-panel').style.display = 'none';
-            document.getElementById('teacher-panel').style.display = 'none';
+            document.querySelectorAll('.register-container, .panel-layout').forEach(el => el.style.display = 'none');
             document.getElementById(panelId).style.display = 'block';
         }
 
@@ -227,48 +867,35 @@
             document.getElementById('box-az-branch').style.display = grade.includes('azhar') ? 'block' : 'none';
         }
 
-        function registerStudent() {
-            const name = document.getElementById('s-name').value || 'الشاطر';
-            document.getElementById('lbl-student-name').textContent = name;
-            
-            // عرض المواد للطالب
-            const subjectsGrid = document.getElementById('subjects-grid');
-            subjectsGrid.innerHTML = subjects.map(subject => `
-                <div class="card" style="cursor: pointer; transition: all 0.3s; text-align:right;" onmouseover="this.style.boxShadow='0 8px 15px rgba(0,0,0,0.2)'" onmouseout="this.style.boxShadow='0 2px 5px rgba(0,0,0,0.05)'" onclick="loadTeachers('${subject}')">
-                    <h3 style="margin: 0; color: #007bff; font-size: 18px;">${subject}</h3>
-                    <p style="margin: 5px 0; color: #666; font-size: 12px;">50 مدرس متاح</p>
-                </div>
-            `).join('');
-            
-            showPanel('student-panel');
-        }
-
-        function loadTeachers(subject) {
-            const teachersGrid = document.getElementById('student-teachers-grid');
-            teachersGrid.innerHTML = teachers.map(teacher => `
-                <div class="card" style="text-align: right; transition: all 0.3s;" onmouseover="this.style.boxShadow='0 8px 15px rgba(0,0,0,0.2)'; this.style.transform='translateY(-5px)'" onmouseout="this.style.boxShadow='0 2px 5px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)'">
-                    <div class="circle-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 60px; height: 60px; font-size: 28px;">👨‍🏫</div>
-                    <h4 style="margin: 10px 0 5px 0; color: #1f2937; font-weight: bold;">${teacher.name}</h4>
-                    <p style="margin: 3px 0; color: #f59e0b; font-weight: bold;">⭐ ${teacher.rating}</p>
-                    <p style="margin: 3px 0; font-size: 12px; color: #666;">${teacher.students} طالب</p>
-                    <p style="margin: 10px 0 0 0; color: #28a745; font-weight: bold; font-size: 18px;">${teacher.price} جنيه/ساعة</p>
-                    <button class="btn btn-success" style="margin-top: 10px; font-size: 12px; padding: 8px;">احجز الآن</button>
-                </div>
-            `).join('');
-        }
-
-        function selectMethod(method) {
-            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
-            event.target.closest('.payment-method').classList.add('selected');
-        }
-
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         }
 
         function toggleMaintenance() {
             const screen = document.getElementById('maintenance-screen');
-            screen.style.display = screen.style.display === 'none' ? 'block' : 'none';
+            screen.style.display = screen.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        // ============= دوال إضافية =============
+        function viewCourse() { alert('📖 عرض محتوى الدرس'); }
+        function continueCourse() { alert('▶️ متابعة الدرس'); }
+        function submitHomework() { alert('📤 إرسال الواجب'); }
+        function viewExamResult() { alert('📊 عرض نتائج الامتحان'); }
+        function startExam() { alert('🚀 بدء الامتحان'); }
+
+        // تحميل الـ theme المحفوظ
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+            }
         }
     </script>
 </body>
