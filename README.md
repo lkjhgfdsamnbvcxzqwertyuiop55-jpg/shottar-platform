@@ -1,0 +1,1 @@
+# shottar-platform
