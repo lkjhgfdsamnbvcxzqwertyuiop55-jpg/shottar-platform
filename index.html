@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الشطار التعليمية - SHOTTAR PLATFORM</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f3f4f6; color: #111827; margin: 0; padding: 0; }
+        .dark-mode { background-color: #111827 !important; color: #f9fafb !important; }
+        .dark-mode .card, .dark-mode .sidebar { background: #1f2937 !important; color: #f9fafb !important; border-color: #374151 !important; }
+        .dark-mode input, .dark-mode select { background: #1f2937 !important; color: #f9fafb !important; border-color: #374151 !important; }
+        
+        /* تصميم اللوجو الأبيض: الكراسة الأنيقة */
+        .notebook-logo {
+            background-color: #ffffff; border: 4px solid #007bff; border-radius: 12px;
+            max-width: 360px; margin: 20px auto; padding: 15px; text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-left: 12px solid #3b82f6;
+        }
+        .notebook-logo h1 { color: #1e3a8a; margin: 0; font-size: 24px; font-weight: bold; }
+        .notebook-logo p { color: #3b82f6; margin: 5px 0 0 0; font-size: 16px; font-weight: bold; letter-spacing: 1px; }
+
+        .register-container { max-width: 550px; margin: 30px auto; background: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .btn { background-color: #007bff; color: white; padding: 12px; border: none; width: 100%; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .btn-danger { background-color: #dc3545; }
+        .btn-success { background-color: #28a745; }
+        
+        /* شاشة صيانة وتحديث المنصة */
+        #maintenance-screen { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:#111827; color:white; text-align:center; padding-top:20%; z-index:99999; font-size:30px; font-weight:bold; }
+        
+        /* تصميم لوحات التحكم والسيرفر */
+        .panel-layout { display: none; padding: 20px; }
+        .sidebar { width: 260px; background-color: #1f2937; color: #ffffff; position: fixed; top: 0; right: 0; bottom: 0; padding: 20px; box-sizing: border-box; z-index: 10; }
+        .sidebar h3 { text-align: center; color: #3b82f6; }
+        .sidebar-menu { list-style: none; padding: 0; }
+        .sidebar-menu li { padding: 12px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .sidebar-menu li.active, .sidebar-menu li:hover { background-color: #007bff; color: white; }
+        .main-content { margin-right: 260px; padding: 20px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 15px; }
+        .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .circle-avatar { width: 70px; height: 70px; border-radius: 50%; background: #007bff; color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 10px; font-weight: bold; }
+        
+        /* شريط التنبيهات */
+        #alert-banner { display: none; background: #ffc107; color: #000; padding: 10px; text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 15px; border-radius: 5px; }
+        .theme-btn { position: fixed; bottom: 20px; left: 20px; padding: 10px; border-radius: 50%; width: 50px; height: 50px; background: #007bff; color: white; border: none; cursor: pointer; font-size: 20px; z-index: 1000; }
+    </style>
+</head>
+<body>
+
+    <button class="theme-btn" onclick="toggleTheme()">💡</button>
+
+    <!-- شاشة التحديث والقفل -->
+    <div id="maintenance-screen">⚙️ جاري تحديث منصة الشطار الآن... برجاء الانتظار والعودة بعد قليل 🚀</div>
+
+    <!-- 1. واجهة التسجيل المحدثة باللوجو الأبيض الجديد -->
+    <div class="register-container" id="register-page">
+        <div class="notebook-logo">
+            <h1>منصة الشطار</h1>
+            <p>SHOTTAR PLATFORM</p>
+        </div>
+        <h3 style="text-align: center; color: #007bff;">إنشاء حساب طالب جديد</h3>
+        
+        <!-- روابط سريعة للمدير والمدرس لتسهيل التصفح الفوري -->
+        <div style="text-align: center; margin-bottom: 15px; background: #e0f2fe; padding: 10px; border-radius: 5px;">
+            <span style="font-weight: bold; font-size:13px;">دخول سريع للمعاينة كمدير أو مدرس:</span><br>
+            <button class="btn" style="width:auto; padding:5px 10px; margin:5px; font-size:12px;" onclick="showPanel('admin-panel')">لوحة المدير</button>
+            <button class="btn" style="width:auto; padding:5px 10px; margin:5px; font-size:12px; background:#28a745;" onclick="showPanel('teacher-panel')">لوحة المدرس</button>
+        </div>
+
+        <form onsubmit="event.preventDefault(); registerStudent();">
+            <div class="form-group"><label>الاسم رباعي:</label><input type="text" id="s-name" required placeholder="اكتب اسمك الرباعي هنا"></div>
+            <div class="form-group"><label>رقم موبايل الطالب:</label><input type="tel" required placeholder="01xxxxxxxxx"></div>
+            <div class="form-group"><label>رقم موبايل ولي الأمر:</label><input type="tel" required placeholder="رقم الوالد أو الوالدة"></div>
+            <div class="form-group">
+                <label>المحافظة:</label>
+                <select id="s-gov" required>
+                    <option value="">اختر محافظتك</option>
+                    <option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option><option>الدقهلية</option><option>الشرقية</option><option>المنوفية</option><option>القليوبية</option><option>البحيرة</option><option>الغربية</option><option>بور سعيد</option><option>دمياط</option><option>الإسماعيلية</option><option>السويس</option><option>كفر الشيخ</option><option>الفيوم</option><option>بني سويف</option><option>المنيا</option><option>أسيوط</option><option>سوهاج</option><option>قنا</option><option>الأقصر</option><option>أسوان</option>
+                </select>
+            </div>
+            <div class="form-group"><label>المركز / المدينة:</label><input type="text" required placeholder="مثال: مركز أبو كبير"></div>
+            <div class="form-group">
+                <label>الفصل الدراسي (السنة الدراسية):</label>
+                <select id="s-grade" required onchange="handleGradeChange()">
+                    <option value="">اختر سنتك الدراسية</option>
+                    <option value="1_general">الصف الأول الثانوي (عام + بكالوريا)</option>
+                    <option value="2_general">الصف الثاني الثانوي (عام + بكالوريا)</option>
+                    <option value="3_general">الصف الثالث الثانوي (عام + بكالوريا)</option>
+                    <option value="1_azhar">الصف الأول الثانوي (أزهري)</option>
+                    <option value="2_azhar">الصف الثاني الثانوي (أزهري)</option>
+                    <option value="3_azhar">الصف الثالث الثانوي (أزهري)</option>
+                </select>
+            </div>
+            <div class="form-group" id="box-gen-branch" style="display: none;"><label>المسار التخصصي:</label><select id="s-gen-branch"><option value="science">علمي علوم / الطب وعلوم الحياة</option><option value="math">علمي رياضة / الهندسة والحاسب</option><option value="arts_biz">أدبي / الأعمال</option><option value="arts_art">أدبي / الآداب والفنون</option></select></div>
+            <div class="form-group" id="box-az-branch" style="display: none;"><label>الشعبة الأزهري:</label><select id="s-az-branch"><option value="az_science">علمي</option><option value="az_arts">أدبي</option></select></div>
+            <div class="form-group"><label>البريد الإلكتروني:</label><input type="email" required placeholder="name@example.com"></div>
+            <div class="form-group"><label>كلمة المرور:</label><input type="password" required placeholder="اختر باسورد قوي"></div>
+            <button type="submit" class="btn">إنشاء حساب ودخول منصة الشطار</button>
+        </form>
+    </div>
+
+    <!-- 2. لوحة تحكم الطالب الذكية -->
+    <div class="panel-layout" id="student-panel">
+        <div class="sidebar">
+            <h3>📖 منصة الشطار</h3>
+            <ul class="sidebar-menu"><li class="active">👨‍🏫 مدرسيني</li><li>📚 كورساتي</li><li>📝 واجباتي</li><li>✏️ امتحاناتي</li><li onclick="location.reload()">🚪 خروج</li></ul>
+        </div>
+        <div class="main-content">
+            <div id="alert-banner">📣 إشعار عاجل من المدرس: غداً امتحان شامل على الباب الأول يرجى الاستعداد!</div>
+            <h2>أهلاً بك يا <span id="lbl-student-name" style="color:#007bff;">الشاطر</span> 👋</h2>
+            <p>اضغط على المادة لإظهار الـ 50 مدرس المتاحين لها على المنصة فوراً:</p>
+            <div class="grid" id="subjects-grid"><!-- المواد بتنزل هنا ذكياً --></div>
+            <h3 style="margin-top:40px; border-bottom:2px solid #ccc; padding-bottom:10px;">المدرسين المتاحين للمادة المختارة:</h3>
+            <div class="grid" id="student-teachers-grid"></div>
+        </div>
+    </div>
+
+    <!-- 3. لوحة تحكم المدير (الكل في الكل + زرار قفل الموقع والتحديث) -->
+    <div class="panel-layout" id="admin-panel" style="margin-right:0;">
+        <div style="background:#1f2937; color:white; padding:15px; border-radius:8px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+            <h2>🛠️ لوحة تحكم المدير العام (الكل في الكل)</h2>
+            <button class="btn btn-danger" style="width:auto;" id="btn-toggle-maintenance" onclick="toggleMaintenance()">🔒 قفل وتحديث المنصة على الجميع</button>
+        </div>
+        <div class="grid">
+            <div class="card" style="text-align:right;">
