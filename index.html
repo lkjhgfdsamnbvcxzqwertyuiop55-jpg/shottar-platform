@@ -10,7 +10,6 @@
         .dark-mode .card, .dark-mode .sidebar { background: #1f2937 !important; color: #f9fafb !important; border-color: #374151 !important; }
         .dark-mode input, .dark-mode select { background: #1f2937 !important; color: #f9fafb !important; border-color: #374151 !important; }
         
-        /* تصميم اللوجو الأبيض: الكراسة الأنيقة */
         .notebook-logo {
             background-color: #ffffff; border: 4px solid #007bff; border-radius: 12px;
             max-width: 360px; margin: 20px auto; padding: 15px; text-align: center;
@@ -27,10 +26,8 @@
         .btn-danger { background-color: #dc3545; }
         .btn-success { background-color: #28a745; }
         
-        /* شاشة صيانة وتحديث المنصة */
         #maintenance-screen { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:#111827; color:white; text-align:center; padding-top:20%; z-index:99999; font-size:30px; font-weight:bold; }
         
-        /* تصميم لوحات التحكم والسيرفر */
         .panel-layout { display: none; padding: 20px; }
         .sidebar { width: 260px; background-color: #1f2937; color: #ffffff; position: fixed; top: 0; right: 0; bottom: 0; padding: 20px; box-sizing: border-box; z-index: 10; }
         .sidebar h3 { text-align: center; color: #3b82f6; }
@@ -43,19 +40,20 @@
         .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .circle-avatar { width: 70px; height: 70px; border-radius: 50%; background: #007bff; color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 10px; font-weight: bold; }
         
-        /* شريط التنبيهات */
         #alert-banner { display: none; background: #ffc107; color: #000; padding: 10px; text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 15px; border-radius: 5px; }
         .theme-btn { position: fixed; bottom: 20px; left: 20px; padding: 10px; border-radius: 50%; width: 50px; height: 50px; background: #007bff; color: white; border: none; cursor: pointer; font-size: 20px; z-index: 1000; }
+        
+        .wallet-box { background: #e0f2fe; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 18px; color: #0369a1; margin-bottom: 20px; border: 1px dashed #0284c7; }
+        .payment-method { border: 2px solid #ccc; padding: 10px; border-radius: 8px; margin: 5px 0; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: bold; }
+        .payment-method.selected { border-color: #007bff; background: #e0f2fe; }
     </style>
 </head>
 <body>
 
     <button class="theme-btn" onclick="toggleTheme()">💡</button>
 
-    <!-- شاشة التحديث والقفل -->
     <div id="maintenance-screen">⚙️ جاري تحديث منصة الشطار الآن... برجاء الانتظار والعودة بعد قليل 🚀</div>
 
-    <!-- 1. واجهة التسجيل المحدثة باللوجو الأبيض الجديد -->
     <div class="register-container" id="register-page">
         <div class="notebook-logo">
             <h1>منصة الشطار</h1>
@@ -63,28 +61,27 @@
         </div>
         <h3 style="text-align: center; color: #007bff;">إنشاء حساب طالب جديد</h3>
         
-        <!-- روابط سريعة للمدير والمدرس لتسهيل التصفح الفوري -->
         <div style="text-align: center; margin-bottom: 15px; background: #e0f2fe; padding: 10px; border-radius: 5px;">
-            <span style="font-weight: bold; font-size:13px;">دخول سريع للمعاينة كمدير أو مدرس:</span><br>
-            <button class="btn" style="width:auto; padding:5px 10px; margin:5px; font-size:12px;" onclick="showPanel('admin-panel')">لوحة المدير</button>
-            <button class="btn" style="width:auto; padding:5px 10px; margin:5px; font-size:12px; background:#28a745;" onclick="showPanel('teacher-panel')">لوحة المدرس</button>
+            <span style="font-weight: bold; font-size:13px;">دخول سريع للمعاينة لايف:</span><br>
+            <button type="button" class="btn" style="width:auto; padding:5px 10px; margin:5px; font-size:12px;" onclick="showPanel('admin-panel')">لوحة المدير</button>
+            <button type="button" class="btn" style="width:auto; padding:5px 10px; margin:5px; font-size:12px; background:#28a745;" onclick="showPanel('teacher-panel')">لوحة المدرس</button>
         </div>
 
-        <form onsubmit="event.preventDefault(); registerStudent();">
-            <div class="form-group"><label>الاسم رباعي:</label><input type="text" id="s-name" required placeholder="اكتب اسمك الرباعي هنا"></div>
-            <div class="form-group"><label>رقم موبايل الطالب:</label><input type="tel" required placeholder="01xxxxxxxxx"></div>
-            <div class="form-group"><label>رقم موبايل ولي الأمر:</label><input type="tel" required placeholder="رقم الوالد أو الوالدة"></div>
+        <form onsubmit="return false;">
+            <div class="form-group"><label>الاسم رباعي:</label><input type="text" id="s-name" placeholder="اكتب اسمك الرباعي هنا"></div>
+            <div class="form-group"><label>رقم موبايل الطالب:</label><input type="tel" id="s-phone" placeholder="01xxxxxxxxx"></div>
+            <div class="form-group"><label>رقم موبايل ولي الأمر:</label><input type="tel" placeholder="رقم الوالد أو الوالدة"></div>
             <div class="form-group">
                 <label>المحافظة:</label>
-                <select id="s-gov" required>
+                <select id="s-gov">
                     <option value="">اختر محافظتك</option>
                     <option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option><option>الدقهلية</option><option>الشرقية</option><option>المنوفية</option><option>القليوبية</option><option>البحيرة</option><option>الغربية</option><option>بور سعيد</option><option>دمياط</option><option>الإسماعيلية</option><option>السويس</option><option>كفر الشيخ</option><option>الفيوم</option><option>بني سويف</option><option>المنيا</option><option>أسيوط</option><option>سوهاج</option><option>قنا</option><option>الأقصر</option><option>أسوان</option>
                 </select>
             </div>
-            <div class="form-group"><label>المركز / المدينة:</label><input type="text" required placeholder="مثال: مركز أبو كبير"></div>
+            <div class="form-group"><label>المركز / المدينة:</label><input type="text" placeholder="مثال: مركز أبو كبير"></div>
             <div class="form-group">
                 <label>الفصل الدراسي (السنة الدراسية):</label>
-                <select id="s-grade" required onchange="handleGradeChange()">
+                <select id="s-grade" onchange="handleGradeChange()">
                     <option value="">اختر سنتك الدراسية</option>
                     <option value="1_general">الصف الأول الثانوي (عام + بكالوريا)</option>
                     <option value="2_general">الصف الثاني الثانوي (عام + بكالوريا)</option>
@@ -96,13 +93,12 @@
             </div>
             <div class="form-group" id="box-gen-branch" style="display: none;"><label>المسار التخصصي:</label><select id="s-gen-branch"><option value="science">علمي علوم / الطب وعلوم الحياة</option><option value="math">علمي رياضة / الهندسة والحاسب</option><option value="arts_biz">أدبي / الأعمال</option><option value="arts_art">أدبي / الآداب والفنون</option></select></div>
             <div class="form-group" id="box-az-branch" style="display: none;"><label>الشعبة الأزهري:</label><select id="s-az-branch"><option value="az_science">علمي</option><option value="az_arts">أدبي</option></select></div>
-            <div class="form-group"><label>البريد الإلكتروني:</label><input type="email" required placeholder="name@example.com"></div>
-            <div class="form-group"><label>كلمة المرور:</label><input type="password" required placeholder="اختر باسورد قوي"></div>
-            <button type="submit" class="btn">إنشاء حساب ودخول منصة الشطار</button>
+            <div class="form-group"><label>البريد الإلكتروني:</label><input type="email" placeholder="name@example.com"></div>
+            <div class="form-group"><label>كلمة المرور:</label><input type="password" placeholder="اختر باسورد قوي"></div>
+            <button type="button" class="btn" onclick="registerStudent()">إنشاء حساب ودخول منصة الشطار</button>
         </form>
     </div>
 
-    <!-- 2. لوحة تحكم الطالب الذكية -->
     <div class="panel-layout" id="student-panel">
         <div class="sidebar">
             <h3>📖 منصة الشطار</h3>
@@ -110,19 +106,35 @@
         </div>
         <div class="main-content">
             <div id="alert-banner">📣 إشعار عاجل من المدرس: غداً امتحان شامل على الباب الأول يرجى الاستعداد!</div>
-            <h2>أهلاً بك يا <span id="lbl-student-name" style="color:#007bff;">الشاطر</span> 👋</h2>
-            <p>اضغط على المادة لإظهار الـ 50 مدرس المتاحين لها على المنصة فوراً:</p>
+            
+            <div style="display:flex; gap:20px;">
+                <div class="wallet-box" style="flex:1;">💰 رصيد محفظتك الحالي: <span id="lbl-student-balance" style="color:#16a34a; font-size:22px;">0</span> جنيه</div>
+                <div class="wallet-box" style="flex:1; background:#fef3c7; color:#b45309; border-color:#d97706;">🔑 كود الشحن الفريد الخاص بك: <span id="lbl-student-code">SH-109</span></div>
+            </div>
+
+            <div class="card" style="text-align:right; margin-bottom:20px; background:#fff;">
+                <h4 style="margin:0 0 10px 0; color:#007bff;">💳 شحن المحفظة الفوري والتلقائي:</h4>
+                <p>اختر طريقة الدفع المفضلة لديك:</p>
+                <div class="payment-method selected" onclick="selectMethod('cash')">📱 فودافون كاش (رقمنا الموحد: 01012345678)</div>
+                <div class="payment-method" onclick="selectMethod('fawry')">🔲 فوري (كود الخدمة: 7890)</div>
+                <div class="payment-method" onclick="selectMethod('huawei')">🛍️ هواوي باي (Huawei Pay)</div>
+                <div class="payment-method" onclick="selectMethod('orange')">🟠 أورنج موني (Orange Money)</div>
+                <div class="payment-method" onclick="selectMethod('etisalat')">🟡 إتصالات كاش (Etisalat Cash)</div>
+            </div>
+
+            <h2 style="text-align:right; color:#007bff; margin-top:30px;">أهلاً بك يا <span id="lbl-student-name">الشاطر</span> 👋</h2>
+            <p style="text-align:right; color:#666;">اضغط على المادة لإظهار الـ 50 مدرس المتاحين لها على المنصة فوراً:</p>
             <div class="grid" id="subjects-grid"><!-- المواد بتنزل هنا ذكياً --></div>
-            <h3 style="margin-top:40px; border-bottom:2px solid #ccc; padding-bottom:10px;">المدرسين المتاحين للمادة المختارة:</h3>
+            <h3 style="margin-top:40px; border-bottom:2px solid #ccc; padding-bottom:10px; text-align:right;">المدرسين المتاحين للمادة المختارة:</h3>
             <div class="grid" id="student-teachers-grid"></div>
         </div>
     </div>
 
-    <!-- 3. لوحة تحكم المدير (الكل في الكل + زرار قفل الموقع والتحديث) -->
+    <!-- لوحة تحكم المدير -->
     <div class="panel-layout" id="admin-panel" style="margin-right:0;">
         <div style="background:#1f2937; color:white; padding:15px; border-radius:8px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
-            <h2>🛠️ لوحة تحكم المدير العام (الكل في الكل)</h2>
-            <button class="btn btn-danger" style="width:auto;" id="btn-toggle-maintenance" onclick="toggleMaintenance()">🔒 قفل وتحديث المنصة على الجميع</button>
+            <h2>🛠️ لوحة تحكم المدير العام</h2>
+            <button class="btn btn-danger" style="width:auto;" id="btn-toggle-maintenance" onclick="toggleMaintenance()">🔒 قفل وتحديث المنصة</button>
         </div>
         <div class="grid">
             <div class="card" style="text-align:right;">
@@ -148,11 +160,11 @@
         </div>
     </div>
 
-    <!-- 4. لوحة تحكم المدرس -->
+    <!-- لوحة تحكم المدرس -->
     <div class="panel-layout" id="teacher-panel">
         <div class="sidebar">
             <h3>📖 منصة الشطار</h3>
-            <ul class="sidebar-menu"><li class="active">👨‍🎓 طلابي</li><li>📹 دروسي</li><li>📊 إحصائياتي</li><li>💼 عقدي</li><li onclick="location.reload()">🚪 خروج</li></ul>
+            <ul class="sidebar-menu"><li class="active">👨‍🎓 طلابي</li><li>📹 دروسي</li><li>📊 إحصائياتي</li><li>💼 عقدي</li><li onclick="location.reload()">���� خروج</li></ul>
         </div>
         <div class="main-content">
             <h2>أهلاً يا <span id="lbl-teacher-name" style="color:#28a745;">معلم الشطار</span> 👋</h2>
@@ -216,13 +228,13 @@
         }
 
         function registerStudent() {
-            const name = document.getElementById('s-name').value;
-            document.getElementById('lbl-student-name').textContent = name || 'الشاطر';
+            const name = document.getElementById('s-name').value || 'الشاطر';
+            document.getElementById('lbl-student-name').textContent = name;
             
             // عرض المواد للطالب
             const subjectsGrid = document.getElementById('subjects-grid');
             subjectsGrid.innerHTML = subjects.map(subject => `
-                <div class="card" style="cursor: pointer; transition: all 0.3s;" onmouseover="this.style.boxShadow='0 8px 15px rgba(0,0,0,0.2)'" onmouseout="this.style.boxShadow='0 2px 5px rgba(0,0,0,0.05)'" onclick="loadTeachers('${subject}')">
+                <div class="card" style="cursor: pointer; transition: all 0.3s; text-align:right;" onmouseover="this.style.boxShadow='0 8px 15px rgba(0,0,0,0.2)'" onmouseout="this.style.boxShadow='0 2px 5px rgba(0,0,0,0.05)'" onclick="loadTeachers('${subject}')">
                     <h3 style="margin: 0; color: #007bff; font-size: 18px;">${subject}</h3>
                     <p style="margin: 5px 0; color: #666; font-size: 12px;">50 مدرس متاح</p>
                 </div>
@@ -243,6 +255,11 @@
                     <button class="btn btn-success" style="margin-top: 10px; font-size: 12px; padding: 8px;">احجز الآن</button>
                 </div>
             `).join('');
+        }
+
+        function selectMethod(method) {
+            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+            event.target.closest('.payment-method').classList.add('selected');
         }
 
         function toggleTheme() {
